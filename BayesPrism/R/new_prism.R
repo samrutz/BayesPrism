@@ -73,7 +73,7 @@ validate.input <- function(input){
 	if(is.null(colnames(input)))
 		stop("Error: please specify the colnames of mixture / reference using gene identifiers!")
 	
-	if(!is(input, "Matrix"))
+	if(!(is(input, "sparseMatrix") || is.matrix(input)))
 		stop("Error: the type of mixture and reference need to be matrix!")
 	
 	NULL
