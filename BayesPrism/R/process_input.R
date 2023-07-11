@@ -161,7 +161,7 @@ select.gene.type <- function(input,
 #' @param sc.dat a cell-by-gene count matrix
 #' @param cell.type.labels a character vector to denote cell types of each cell 
 #' @param cell.state.labels a character vector to denote cell state of each cell 
-#' @param psuedo.count a numeric value used for log2 transformation. =0.1 for 10x data, =10 for smart-seq. Default=0.1.
+#' @param pseudo.count a numeric value used for log2 transformation. =0.1 for 10x data, =10 for smart-seq. Default=0.1.
 #' @param cell.count.cutoff a numeric value to exclude cell state with number of cells fewer than this value for t test. Default=50
 #' @return a list of dataframes with p.value and logFC
 #' @import scran
