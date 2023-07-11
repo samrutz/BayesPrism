@@ -170,7 +170,7 @@ select.gene.type <- function(input,
 get.exp.stat <- function(sc.dat,
 						 cell.type.labels,
 						 cell.state.labels,
-						 psuedo.count=0.1,
+						 pseudo.count=0.1,
 						 cell.count.cutoff=50,
 						 n.cores=1){
 		
@@ -182,7 +182,11 @@ get.exp.stat <- function(sc.dat,
 	lib.size <- rowSums(sc.dat)
 	lib.size <- lib.size / median(lib.size)
 	dat.tmp <- sc.dat/lib.size
-	dat.tmp <- log2(dat.tmp + psuedo.count) - log2(psuedo.count)
+	if (is(dat.tmp, "sparseMatrix")){
+		dat.tmp@x <- log2((dat.tmp@x + pseudo.count) / pseudo.count)
+	} else {
+		dat.tmp[dat.tmp > 0.0] <- log2((dat.tmp[dat.tmp > 0.0] + pseudo.count) / pseudo.count)
+	}
 
 	#pairwise t test
 	fit.up <- pairwiseTTests(x= t(dat.tmp), 
