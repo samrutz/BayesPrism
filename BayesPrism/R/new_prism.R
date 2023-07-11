@@ -56,6 +56,17 @@ collapse <- function(ref, labels){
 #' function to validate if input contains negative, non-numeric, NA (stop), or is normalized (warning) or log-transformed (warning)
 #' @param input count.matrix, GEP or mixture
 validate.input <- function(input){
+	if((!is.matrix(input)) && !(is(input, "sparseMatrix")))
+		stop("Error: the type of mixture and reference needs to be matrix!")
+	
+	if((!is(input, "sparseMatrix")) && (!is.numeric(input)))
+		stop("Error: input contains non-numeric values.
+		   Please double check your input consists of ununnormalized and untransformed raw counts. \n")
+
+	if(min(is.finite(input)) < 1)
+		stop("Error: input contains non-numeric values.
+		   Please double check your input consists of ununnormalized and untransformed raw counts. \n")
+
 	#check if referece is non-log transformed
 	if(max(input)<=1){
 		warning("Warning: input seems to be normalized.") 
@@ -64,17 +75,13 @@ validate.input <- function(input){
 		if(max(input) < 20) 
 			warning("Warning: input seems to be log-transformed. Please double check your input. Log transformation should be avoided")
 	}
-	
-	filter.idx <- colSums( input < 0 | !is.finite(input)) > 0
-	if(sum(filter.idx)>0)
-		stop(" Error: input contains negative, non-finite or non-numeric values. 
-			   Please double check your input is unnormalized and untransformed raw count. \n")
+
+	if(min(input < 0))
+		stop("Error: input contains  negative values.
+			   Please double check your input consists of ununnormalized and untransformed raw counts. \n")
 	
 	if(is.null(colnames(input)))
 		stop("Error: please specify the colnames of mixture / reference using gene identifiers!")
-	
-	if(!is.matrix(input))
-		stop("Error: the type of mixture and reference need to be matrix!")
 	
 	NULL
 }
